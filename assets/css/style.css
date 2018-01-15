@@ -3,3 +3,17 @@ button{
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.gif{
+    max-width: 200px;
+    margin: 10px;
+}
+
+#gifContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.gifDiv{
+    flex: 1;
+}

@@ -29,17 +29,26 @@ function displayGifs() {
 
     for (let i = 0; i < response.data.length; i++) {
       var still = response.data[i].images.fixed_height_still.url;
-      var animated = response.data[i].bitly_gif_url;
+      var animated = response.data[i].images.fixed_height.url;
 
       var gif = $("<img>")
         .attr("src", still)
+        .attr('data-still', still)
+        .attr('data-animated', animated)
+        .attr('data-state', 'still')
         .addClass("gif");
 
       var rating = $("<p>").text("Rating: " + response.data[i].rating);
 
-      $("#gifContainer").append(rating);
+      var gifDiv = $('<div>').addClass('gifDiv');
 
-      $("#gifContainer").append(gif);
+      gifDiv.append(rating, gif);
+
+      // gifDiv.html(gif);
+
+      $('#gifContainer').append(gifDiv);
+
+      console.log(response.data[i]);
       // $(document).on("click", ".gif", function() {
       //   var state = $(this).attr("src");
       //   if (state == still){
@@ -50,6 +59,37 @@ function displayGifs() {
     
   });
 }
+
+function animateGifs(gif){
+
+  console.log(gif);
+  console.log(gif.data('still'));
+  console.log(gif.data('animated'));
+
+  if(gif.attr('data-state') === 'still'){
+    console.log("data state before change", gif.attr('data-state'));
+    gif.attr('data-state', 'animated');
+    gif.attr('src', gif.data('animated'));
+    console.log("value of gif if", gif);
+    console.log("data state after change", gif.attr('data-state'));
+  } else if(gif.attr('data-state') === 'animated') {
+    console.log("data state before change", gif.attr('data-state'));
+    gif.attr('data-state', 'still');
+    gif.attr('src', gif.data('still'));
+    console.log("value of gif else", gif);
+    console.log("data state after change", gif.attr('data-state'));
+  }
+
+}
+
+$('#gifContainer').on('click', '.gif', function(){
+
+  animateGifs($(this));
+
+  console.log('');
+
+});
+
 
 //generates buttons for the original items in array and future queried buttons
 function generateButtons() {
@@ -92,9 +132,3 @@ $("#submit").on("click", function(event) {
 $(document).on("click", ".cartoon", displayGifs);
 
 generateButtons();
-
-//place gif on page
-//start in paused state
-//when user clicks gif should play
-//receive rating data
-//display correlated rating data above each gif
